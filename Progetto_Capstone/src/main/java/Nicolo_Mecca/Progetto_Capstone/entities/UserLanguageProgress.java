@@ -19,7 +19,7 @@ public class UserLanguageProgress {
     @Column(name = "user_language_progress_id")
     private UUID userLanguageProgressId;
     @Enumerated(EnumType.STRING)
-    private UserLevel skillLevel;
+    private UserQuizResult.UserLevel skillLevel;
     @Column(name = "current_score")
     private Integer currentScore;
 
@@ -31,7 +31,7 @@ public class UserLanguageProgress {
     @JoinColumn(name = "programming_language_id")
     private ProgrammingLanguage programmingLanguage;
 
-    public UserLanguageProgress(UserLevel skillLevel, Integer currentScore) {
+    public UserLanguageProgress(UserQuizResult.UserLevel skillLevel, Integer currentScore) {
         this.skillLevel = skillLevel;
         this.currentScore = currentScore;
     }

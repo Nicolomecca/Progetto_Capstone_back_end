@@ -34,4 +34,5 @@ public class InitialAssessment {
         this.date = date;
         this.completed = completed;
     }
+    
 }
