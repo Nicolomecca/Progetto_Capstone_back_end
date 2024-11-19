@@ -14,7 +14,8 @@ import java.util.UUID;
 @Table(name = "programming_languages")
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties({"quizResults", "languageProgresses"}) // Relazioni bidirezionali con mappedBy
+@JsonIgnoreProperties({"quizResults", "languageProgresses", "initialAssessments"})
+// Relazioni bidirezionali con mappedBy
 
 public class ProgrammingLanguage {
     @Id
@@ -31,6 +32,9 @@ public class ProgrammingLanguage {
 
     @OneToMany(mappedBy = "programmingLanguage")
     private List<UserLanguageProgress> languageProgresses;
+
+    @OneToMany(mappedBy = "programmingLanguage")
+    private List<InitialAssessment> initialAssessments;
 
     public ProgrammingLanguage(String name, String category) {
         this.name = name;
