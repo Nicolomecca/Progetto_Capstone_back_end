@@ -1,12 +1,17 @@
 package Nicolo_Mecca.Progetto_Capstone.entities;
 
+import Nicolo_Mecca.Progetto_Capstone.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,7 +20,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties({"quizResults", "languageProgresses", "initialAssessment"})
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
@@ -35,6 +40,8 @@ public class User {
     private String profileImage;
     @Column(name = "total_score")
     private Integer totalScore;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @OneToOne(mappedBy = "user")
     private InitialAssessment initialAssessment;
@@ -54,5 +61,16 @@ public class User {
         this.profileImage = "https://ui-avatars.com/api/?name=" +
                 name + "+" + surname;
         this.totalScore = totalScore;
+        this.role = UserRole.USER;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(this.role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.userName;
     }
 }

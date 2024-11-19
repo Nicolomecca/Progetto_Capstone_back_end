@@ -6,6 +6,7 @@ import Nicolo_Mecca.Progetto_Capstone.exceptions.BadRequestException;
 import Nicolo_Mecca.Progetto_Capstone.exceptions.NotFoundException;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -14,6 +15,8 @@ import java.util.UUID;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User findById(UUID userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with id" + userId + "not found"));
@@ -29,7 +32,7 @@ public class UserService {
                 userDTO.surname(),
                 userDTO.userName(),
                 userDTO.email(),
-                userDTO.password(),
+                passwordEncoder.encode(userDTO.password()),
                 0
         );
         return userRepository.save(user);
