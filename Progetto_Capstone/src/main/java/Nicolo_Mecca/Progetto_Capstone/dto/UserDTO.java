@@ -1,6 +1,9 @@
 package Nicolo_Mecca.Progetto_Capstone.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public record UserDTO(
         @NotEmpty(message = "Name is required")
@@ -24,9 +27,6 @@ public record UserDTO(
                 regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
                 message = "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"
         )
-        String password,
-
-        @NotNull(message = "Total score is required")
-        Integer totalScore
+        String password
 ) {
 }

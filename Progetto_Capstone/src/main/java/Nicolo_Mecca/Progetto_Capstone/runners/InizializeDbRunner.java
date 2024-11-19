@@ -46,8 +46,7 @@ public class InizializeDbRunner implements CommandLineRunner {
                 adminSurname,
                 adminUsername,
                 adminEmail,
-                adminPassword,
-                null
+                adminPassword
         );
 
         User admin = userService.saveAdmin(adminDTO);
