@@ -52,7 +52,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<UserLanguageProgress> languageProgresses;
 
-    public User(String name, String surname, String userName, String email, String password, Integer totalScore) {
+    public User(String name, String surname, String userName, String email, String password) {
         this.name = name;
         this.surname = surname;
         this.userName = userName;
@@ -60,8 +60,19 @@ public class User implements UserDetails {
         this.password = password;
         this.profileImage = "https://ui-avatars.com/api/?name=" +
                 name + "+" + surname;
-        this.totalScore = totalScore;
+        this.totalScore = 0;
         this.role = UserRole.USER;
+    }
+
+    public User(String name, String surname, String userName, String email, String password, UserRole role) {
+        this.name = name;
+        this.surname = surname;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.profileImage = "https://ui-avatars.com/api/?name=" + name + "+" + surname;
+        this.totalScore = null;  // Admin non ha score
+        this.role = role;
     }
 
     @Override

@@ -2,7 +2,6 @@ package Nicolo_Mecca.Progetto_Capstone.runners;
 
 import Nicolo_Mecca.Progetto_Capstone.dto.UserDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
-import Nicolo_Mecca.Progetto_Capstone.enums.UserRole;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserRepository;
 import Nicolo_Mecca.Progetto_Capstone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +47,10 @@ public class InizializeDbRunner implements CommandLineRunner {
                 adminUsername,
                 adminEmail,
                 adminPassword,
-                0
+                null
         );
 
-        User admin = userService.saveUser(adminDTO);
-        admin.setRole(UserRole.ADMIN);
+        User admin = userService.saveAdmin(adminDTO);
         userRepository.save(admin);
     }
 }
