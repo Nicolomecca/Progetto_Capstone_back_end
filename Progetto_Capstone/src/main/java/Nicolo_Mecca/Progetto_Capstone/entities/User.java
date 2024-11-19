@@ -1,5 +1,6 @@
 package Nicolo_Mecca.Progetto_Capstone.entities;
 
+import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -42,6 +43,9 @@ public class User implements UserDetails {
     private Integer totalScore;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "skill_level")
+    private UserLevel skillLevel;
 
     @OneToOne(mappedBy = "user")
     private InitialAssessment initialAssessment;
@@ -62,6 +66,7 @@ public class User implements UserDetails {
                 name + "+" + surname;
         this.totalScore = 0;
         this.role = UserRole.USER;
+        this.skillLevel = UserLevel.BEGINNER;
     }
 
     public User(String name, String surname, String userName, String email, String password, UserRole role) {
@@ -75,6 +80,10 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+    public void updateLevel() {
+        this.skillLevel = UserLevel.fromScore(this.totalScore);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role.name()));
@@ -85,3 +94,4 @@ public class User implements UserDetails {
         return this.userName;
     }
 }
+

@@ -2,6 +2,7 @@ package Nicolo_Mecca.Progetto_Capstone.service;
 
 import Nicolo_Mecca.Progetto_Capstone.dto.UserDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
+import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserRole;
 import Nicolo_Mecca.Progetto_Capstone.exceptions.BadRequestException;
 import Nicolo_Mecca.Progetto_Capstone.exceptions.NotFoundException;
@@ -70,5 +71,21 @@ public class UserService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return userRepository.findAll(pageable);
     }
+
+    public Page<User> getLeaderboard(int page, int size) {
+        return userRepository.findAllByOrderByTotalScoreDesc(
+                PageRequest.of(page, size)
+        );
+    }
+
+    public User getProfile(UUID userId) {
+        User user = findById(userId);
+        // Aggiorna il livello basato sul punteggio totale
+        UserLevel currentLevel = UserLevel.fromScore(user.getTotalScore());
+        user.setSkillLevel(currentLevel);
+
+        return user;
+    }
+
 
 }
