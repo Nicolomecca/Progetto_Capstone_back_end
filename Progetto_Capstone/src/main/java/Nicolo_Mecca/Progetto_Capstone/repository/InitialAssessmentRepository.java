@@ -1,6 +1,7 @@
 package Nicolo_Mecca.Progetto_Capstone.repository;
 
 import Nicolo_Mecca.Progetto_Capstone.entities.InitialAssessment;
+import Nicolo_Mecca.Progetto_Capstone.entities.ProgrammingLanguage;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,4 +12,8 @@ public interface InitialAssessmentRepository extends JpaRepository<InitialAssess
     Optional<InitialAssessment> findByUser(User user);
 
     boolean existsByUser(User user);
+
+    Optional<InitialAssessment> findByUserAndProgrammingLanguage(User user, ProgrammingLanguage language);
+
+    boolean existsByUserAndProgrammingLanguage(User user, ProgrammingLanguage language);
 }

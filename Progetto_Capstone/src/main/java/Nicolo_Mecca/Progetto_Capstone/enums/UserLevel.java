@@ -4,7 +4,7 @@ package Nicolo_Mecca.Progetto_Capstone.enums;
 public enum UserLevel {
     BEGINNER("Bronze", 0),
     INTERMEDIATE("Silver", 100),
-    VETERAN("Gold", 200);
+    ADVANCED("Gold", 200);
 
     private final String badge;
     private final int requiredScore;
@@ -15,7 +15,7 @@ public enum UserLevel {
     }
 
     public static UserLevel fromScore(int score) {
-        if (score >= VETERAN.requiredScore) return VETERAN;
+        if (score >= ADVANCED.requiredScore) return ADVANCED;
         if (score >= INTERMEDIATE.requiredScore) return INTERMEDIATE;
         return BEGINNER;
     }
