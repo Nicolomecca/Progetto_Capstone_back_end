@@ -26,6 +26,7 @@ public class ProgrammingLanguage {
     @Column(nullable = false, unique = true)
     private String name;
     private String category;
+    private String icon;
 
     @OneToMany(mappedBy = "programmingLanguage")
     private List<UserQuizResult> quizResults;
@@ -36,8 +37,9 @@ public class ProgrammingLanguage {
     @OneToMany(mappedBy = "programmingLanguage")
     private List<InitialAssessment> initialAssessments;
 
-    public ProgrammingLanguage(String name, String category) {
+    public ProgrammingLanguage(String name, String category, String icon) {
         this.name = name;
         this.category = category;
+        this.icon = icon;
     }
 }
