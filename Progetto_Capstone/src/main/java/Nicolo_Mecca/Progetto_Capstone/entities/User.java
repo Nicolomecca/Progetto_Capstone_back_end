@@ -1,6 +1,7 @@
 package Nicolo_Mecca.Progetto_Capstone.entities;
 
 import Nicolo_Mecca.Progetto_Capstone.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties({"quizResults", "languageProgresses", "initialAssessment"})
+@JsonIgnoreProperties({"quizResults", "languageProgresses", "initialAssessment", "accountNonLocked", "accountNonExpired", "credentialsNonExpired", "enabled", "authorities"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -40,6 +41,7 @@ public class User implements UserDetails {
     private String profileImage;
     @Column(name = "total_score")
     private Integer totalScore;
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private UserRole role;
 

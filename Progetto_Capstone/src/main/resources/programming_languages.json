@@ -1,0 +1,88 @@
+{
+  "programming_languages": [
+    {
+      "name": "Python",
+      "category": "Backend",
+      "description": "Linguaggio versatile e potente, ideale per data science e sviluppo web",
+      "icon": "url_icona_python",
+      "theory": [
+        {
+          "section": "Fondamenti",
+          "topics": [
+            {
+              "title": "Introduzione a Python",
+              "content": "Python è un linguaggio di programmazione ad alto livello...",
+              "examples": [
+                {
+                  "code": "print('Hello, World!')",
+                  "explanation": "Il classico esempio di stampa in Python"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "Strutture Dati",
+          "topics": [
+            {
+              "title": "Liste e Tuple",
+              "content": "Le strutture dati fondamentali in Python..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "React",
+      "category": "Frontend",
+      "description": "Libreria JavaScript per costruire interfacce utente moderne e reattive",
+      "icon": "url_icona_react",
+      "theory": [
+        {
+          "section": "Concetti Base",
+          "topics": [
+            {
+              "title": "Componenti React",
+              "content": "I componenti sono i blocchi fondamentali di React..."
+            }
+          ]
+        },
+        {
+          "section": "Hooks",
+          "topics": [
+            {
+              "title": "useState e useEffect",
+              "content": "Gli hooks permettono di gestire lo stato..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PostgreSQL",
+      "category": "Database",
+      "description": "Sistema di gestione database relazionale open source avanzato",
+      "icon": "url_icona_postgres",
+      "theory": [
+        {
+          "section": "SQL Base",
+          "topics": [
+            {
+              "title": "Query fondamentali",
+              "content": "Le query SQL di base in PostgreSQL..."
+            }
+          ]
+        },
+        {
+          "section": "Gestione Database",
+          "topics": [
+            {
+              "title": "Indici e Performance",
+              "content": "Ottimizzazione delle performance in PostgreSQL..."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
