@@ -1,5 +1,6 @@
 package Nicolo_Mecca.Progetto_Capstone.entities;
 
+import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class UserLanguageProgress {
     @Column(name = "user_language_progress_id")
     private UUID userLanguageProgressId;
     @Enumerated(EnumType.STRING)
-    private UserQuizResult.UserLevel skillLevel;
+    private UserLevel skillLevel;
     @Column(name = "current_score")
     private Integer currentScore;
 
@@ -31,7 +32,7 @@ public class UserLanguageProgress {
     @JoinColumn(name = "programming_language_id")
     private ProgrammingLanguage programmingLanguage;
 
-    public UserLanguageProgress(UserQuizResult.UserLevel skillLevel, Integer currentScore) {
+    public UserLanguageProgress(UserLevel skillLevel, Integer currentScore) {
         this.skillLevel = skillLevel;
         this.currentScore = currentScore;
     }

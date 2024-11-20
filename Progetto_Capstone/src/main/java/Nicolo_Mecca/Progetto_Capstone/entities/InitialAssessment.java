@@ -29,10 +29,14 @@ public class InitialAssessment {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "programming_language_id")
+    private ProgrammingLanguage programmingLanguage;
+
     public InitialAssessment(Integer score, LocalDateTime date, Boolean completed) {
         this.score = score;
         this.date = date;
         this.completed = completed;
     }
-    
+
 }

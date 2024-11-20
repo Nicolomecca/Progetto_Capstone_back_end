@@ -2,6 +2,7 @@ package Nicolo_Mecca.Progetto_Capstone.tools;
 
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
 import Nicolo_Mecca.Progetto_Capstone.exceptions.UnauthorizedException;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,12 @@ public class JWT {
 
     public void verifyToken(String token) {
         try {
-            Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build().parse(token);
+            Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                    .build()
+                    .parse(token);
+        } catch (ExpiredJwtException ex) {
+            throw new UnauthorizedException("Token expired, please login again");
         } catch (Exception e) {
             throw new UnauthorizedException("Token not valid");
         }
