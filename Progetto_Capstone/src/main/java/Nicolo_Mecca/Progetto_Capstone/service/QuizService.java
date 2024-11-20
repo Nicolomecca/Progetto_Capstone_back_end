@@ -1,13 +1,14 @@
 package Nicolo_Mecca.Progetto_Capstone.service;
 
-import Nicolo_Mecca.Progetto_Capstone.entities.InitialAssessment;
 import Nicolo_Mecca.Progetto_Capstone.entities.ProgrammingLanguage;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
 import Nicolo_Mecca.Progetto_Capstone.entities.UserLanguageProgress;
+import Nicolo_Mecca.Progetto_Capstone.entities.UserQuizResult;
+import Nicolo_Mecca.Progetto_Capstone.enums.QuizDifficulty;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
-import Nicolo_Mecca.Progetto_Capstone.repository.InitialAssessmentRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.ProgrammingLanguageRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserLanguageProgressRepository;
+import Nicolo_Mecca.Progetto_Capstone.repository.UserQuizResultRepository;
 import kong.unirest.core.HttpResponse;
 import kong.unirest.core.JsonNode;
 import kong.unirest.core.Unirest;
@@ -19,28 +20,28 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
-public class InitialAssessmentService {
+public class QuizService {
     @Value("${quiz.api.key}")
     private String apiKey;
 
     @Autowired
-    private InitialAssessmentRepository initialAssessmentRepository;
-    @Autowired
-    private ProgrammingLanguageRepository programmingLanguageRepository;
+    private UserQuizResultRepository quizResultRepository;
     @Autowired
     private UserLanguageProgressRepository progressRepository;
+    @Autowired
+    private ProgrammingLanguageRepository programmingLanguageRepository;
 
-    public List<Map<String, Object>> getInitialAssessment(String languageName) {
+    public List<Map<String, Object>> getQuizByLanguage(String languageName, QuizDifficulty difficulty) {
         try {
             String apiCategory = mapLanguageToCategory(languageName);
 
             HttpResponse<JsonNode> response = Unirest.get("https://quizapi.io/api/v1/questions")
                     .queryString("apiKey", apiKey)
                     .queryString("category", apiCategory)
-                    .queryString("limit", "10")
+                    .queryString("difficulty", difficulty.toString().toLowerCase())
+                    .queryString("limit", "1")
                     .asJson();
 
             if (response.getStatus() == 200) {
@@ -51,62 +52,59 @@ public class InitialAssessmentService {
                 }
                 return questions;
             }
-            throw new RuntimeException("Failed to fetch assessment questions");
+            throw new RuntimeException("Failed to fetch quiz question");
         } catch (Exception e) {
-            throw new RuntimeException("Error fetching assessment questions: " + e.getMessage());
+            throw new RuntimeException("Error fetching quiz question: " + e.getMessage());
         }
     }
 
     private String mapLanguageToCategory(String languageName) {
         return switch (languageName.toLowerCase()) {
-            case "react" -> "Linux";
-            case "python" -> "Python";
-            case "postgresql" -> "SQL";
+            case "react" -> "Frontend";
+            case "python" -> "Backend";
+            case "postgresql" -> "Database";
             default -> throw new RuntimeException("Unsupported programming language: " + languageName);
         };
     }
 
-    public InitialAssessment saveInitialAssessment(User user, String languageName, Integer score) {
+    public UserQuizResult saveQuizResult(User user, String languageName, Integer score, QuizDifficulty difficulty) {
         ProgrammingLanguage language = programmingLanguageRepository.findByName(languageName)
                 .orElseThrow(() -> new RuntimeException("Programming language not found"));
 
-        if (initialAssessmentRepository.existsByUserAndProgrammingLanguage(user, language)) {
-            throw new RuntimeException("Initial assessment already exists for this user and language");
-        }
-
-        InitialAssessment assessment = new InitialAssessment(
+        UserQuizResult result = new UserQuizResult(
+                difficulty,
                 score,
                 LocalDateTime.now(),
                 true
         );
-        assessment.setUser(user);
-        assessment.setProgrammingLanguage(language);
+        result.setUser(user);
+        result.setProgrammingLanguage(language);
 
-        initializeUserProgress(user, language, score);
+        updateUserProgress(user, language, score);
 
-        return initialAssessmentRepository.save(assessment);
+        return quizResultRepository.save(result);
     }
 
-    private void initializeUserProgress(User user, ProgrammingLanguage language, Integer score) {
-        UserLanguageProgress progress = new UserLanguageProgress(
-                calculateInitialLevel(score),
-                score
-        );
-        progress.setUser(user);
-        progress.setProgrammingLanguage(language);
+    private void updateUserProgress(User user, ProgrammingLanguage language, Integer newScore) {
+        UserLanguageProgress progress = progressRepository
+                .findByUserAndProgrammingLanguage(user, language)
+                .orElseThrow(() -> new RuntimeException("User progress not found"));
+
+        progress.setCurrentScore(progress.getCurrentScore() + newScore);
+        progress.setSkillLevel(calculateNewLevel(progress.getCurrentScore()));
         progressRepository.save(progress);
     }
 
-    private UserLevel calculateInitialLevel(Integer score) {
-        if (score < 30) return UserLevel.BEGINNER;
-        if (score < 60) return UserLevel.INTERMEDIATE;
+    private UserLevel calculateNewLevel(Integer totalScore) {
+        if (totalScore < 100) return UserLevel.BEGINNER;
+        if (totalScore < 200) return UserLevel.INTERMEDIATE;
         return UserLevel.ADVANCED;
     }
 
-    public Optional<InitialAssessment> getUserInitialAssessment(User user, String languageName) {
+    public List<UserQuizResult> getUserQuizHistory(User user, String languageName) {
         ProgrammingLanguage language = programmingLanguageRepository.findByName(languageName)
                 .orElseThrow(() -> new RuntimeException("Programming language not found"));
 
-        return initialAssessmentRepository.findByUserAndProgrammingLanguage(user, language);
+        return quizResultRepository.findByUserAndProgrammingLanguage(user, language);
     }
 }
