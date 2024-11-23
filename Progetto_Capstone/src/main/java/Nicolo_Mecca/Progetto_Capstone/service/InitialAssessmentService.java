@@ -59,8 +59,8 @@ public class InitialAssessmentService {
 
     private String mapLanguageToCategory(String languageName) {
         return switch (languageName.toLowerCase()) {
-            case "react" -> "Linux";
-            case "python" -> "Python";
+            case "react" -> "React";
+            case "next.js" -> "Next.js";
             case "postgresql" -> "SQL";
             default -> throw new RuntimeException("Unsupported programming language: " + languageName);
         };
