@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record InitialAssessmentDTO(
@@ -19,12 +18,8 @@ public record InitialAssessmentDTO(
         @NotNull(message = "Score is required")
         @Min(value = 0, message = "Score cannot be negative")
         @Max(value = 100, message = "Score cannot be more than 100")
-        Integer score,
+        Integer score
 
-        @NotNull(message = "Date is required")
-        LocalDateTime date,
 
-        @NotNull(message = "Completed status is required")
-        Boolean completed
 ) {
 }

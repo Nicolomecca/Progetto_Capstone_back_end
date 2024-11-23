@@ -1,11 +1,14 @@
 package Nicolo_Mecca.Progetto_Capstone.service;
 
 import Nicolo_Mecca.Progetto_Capstone.dto.InitialAssessmentDTO;
+import Nicolo_Mecca.Progetto_Capstone.dto.InitialAssessmentResponseDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.InitialAssessment;
 import Nicolo_Mecca.Progetto_Capstone.entities.ProgrammingLanguage;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
 import Nicolo_Mecca.Progetto_Capstone.entities.UserLanguageProgress;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
+import Nicolo_Mecca.Progetto_Capstone.exceptions.BadRequestException;
+import Nicolo_Mecca.Progetto_Capstone.exceptions.NotFoundException;
 import Nicolo_Mecca.Progetto_Capstone.repository.InitialAssessmentRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.ProgrammingLanguageRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserLanguageProgressRepository;
@@ -36,6 +39,7 @@ public class InitialAssessmentService {
     private UserLanguageProgressRepository progressRepository;
     @Autowired
     private UserRepository userRepository;
+
 
     public List<Map<String, Object>> getInitialAssessment(String languageName) {
         try {
@@ -70,29 +74,50 @@ public class InitialAssessmentService {
         };
     }
 
-    public InitialAssessment saveInitialAssessment(InitialAssessmentDTO assessmentDTO) {
-        User user = userRepository.findById(assessmentDTO.userId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+    public InitialAssessmentResponseDTO saveInitialAssessment(User user, InitialAssessmentDTO assessmentDTO) {
         ProgrammingLanguage language = programmingLanguageRepository.findByName(assessmentDTO.programmingLanguageName())
-                .orElseThrow(() -> new RuntimeException("Programming language not found"));
+                .orElseThrow(() -> new NotFoundException("Programming language not found: " + assessmentDTO.programmingLanguageName()));
 
         if (initialAssessmentRepository.existsByUserAndProgrammingLanguage(user, language)) {
-            throw new RuntimeException("Initial assessment already exists for this user and language");
+            throw new BadRequestException("Initial assessment already exists for this user and language");
         }
 
         InitialAssessment assessment = new InitialAssessment(
                 assessmentDTO.score(),
                 LocalDateTime.now(),
-                assessmentDTO.completed()
+                true
         );
         assessment.setUser(user);
         assessment.setProgrammingLanguage(language);
 
-        initializeUserProgress(user, language, assessmentDTO.score());
+        InitialAssessment savedAssessment = initialAssessmentRepository.save(assessment);
 
-        return initialAssessmentRepository.save(assessment);
+        UserLevel skillLevel = UserLevel.fromScore(assessmentDTO.score());
+        UserLanguageProgress progress = new UserLanguageProgress(skillLevel, assessmentDTO.score());
+        progress.setUser(user);
+        progress.setProgrammingLanguage(language);
+        progressRepository.save(progress);
+
+        // Update user's total score
+        user.setTotalScore(user.getTotalScore() + assessmentDTO.score());
+        userRepository.save(user);
+
+        return new InitialAssessmentResponseDTO(
+                savedAssessment.getInitial_assessmentId(),
+                user.getUserId(),
+                user.getUsername(),
+                savedAssessment.getScore(),
+                savedAssessment.getDate(),
+                savedAssessment.getCompleted(),
+                skillLevel,
+                language.getName()
+        );
     }
+
+    private UserLevel calculateSkillLevel(Integer score) {
+        return UserLevel.fromScore(score);
+    }
+
 
     private void initializeUserProgress(User user, ProgrammingLanguage language, Integer score) {
         UserLanguageProgress progress = new UserLanguageProgress(
