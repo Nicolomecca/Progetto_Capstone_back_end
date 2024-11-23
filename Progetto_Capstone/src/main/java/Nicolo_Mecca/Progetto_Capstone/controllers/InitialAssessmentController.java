@@ -1,11 +1,13 @@
 package Nicolo_Mecca.Progetto_Capstone.controllers;
 
+import Nicolo_Mecca.Progetto_Capstone.dto.InitialAssessmentDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.InitialAssessment;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
 import Nicolo_Mecca.Progetto_Capstone.service.InitialAssessmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,14 +26,21 @@ public class InitialAssessmentController {
         return initialAssessmentService.getInitialAssessment(languageName);
     }
 
-    @PostMapping("/{languageName}")
+    @PostMapping
     @PreAuthorize("hasAuthority('USER')")
     public InitialAssessment saveInitialAssessment(
             @AuthenticationPrincipal User user,
-            @PathVariable String languageName,
-            @RequestBody Integer score) {
-        return initialAssessmentService.saveInitialAssessment(user, languageName, score);
+            @Validated @RequestBody InitialAssessmentDTO assessmentDTO) {
+        assessmentDTO = new InitialAssessmentDTO(
+                user.getUserId(),
+                assessmentDTO.programmingLanguageName(),
+                assessmentDTO.score(),
+                null,
+                true
+        );
+        return initialAssessmentService.saveInitialAssessment(assessmentDTO);
     }
+
 
     @GetMapping("/user/{languageName}")
     @PreAuthorize("hasAuthority('USER')")

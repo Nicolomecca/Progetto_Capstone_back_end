@@ -1,5 +1,6 @@
 package Nicolo_Mecca.Progetto_Capstone.service;
 
+import Nicolo_Mecca.Progetto_Capstone.dto.InitialAssessmentDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.InitialAssessment;
 import Nicolo_Mecca.Progetto_Capstone.entities.ProgrammingLanguage;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
@@ -8,6 +9,7 @@ import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
 import Nicolo_Mecca.Progetto_Capstone.repository.InitialAssessmentRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.ProgrammingLanguageRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserLanguageProgressRepository;
+import Nicolo_Mecca.Progetto_Capstone.repository.UserRepository;
 import kong.unirest.core.HttpResponse;
 import kong.unirest.core.JsonNode;
 import kong.unirest.core.Unirest;
@@ -32,6 +34,8 @@ public class InitialAssessmentService {
     private ProgrammingLanguageRepository programmingLanguageRepository;
     @Autowired
     private UserLanguageProgressRepository progressRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public List<Map<String, Object>> getInitialAssessment(String languageName) {
         try {
@@ -66,8 +70,11 @@ public class InitialAssessmentService {
         };
     }
 
-    public InitialAssessment saveInitialAssessment(User user, String languageName, Integer score) {
-        ProgrammingLanguage language = programmingLanguageRepository.findByName(languageName)
+    public InitialAssessment saveInitialAssessment(InitialAssessmentDTO assessmentDTO) {
+        User user = userRepository.findById(assessmentDTO.userId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        ProgrammingLanguage language = programmingLanguageRepository.findByName(assessmentDTO.programmingLanguageName())
                 .orElseThrow(() -> new RuntimeException("Programming language not found"));
 
         if (initialAssessmentRepository.existsByUserAndProgrammingLanguage(user, language)) {
@@ -75,14 +82,14 @@ public class InitialAssessmentService {
         }
 
         InitialAssessment assessment = new InitialAssessment(
-                score,
+                assessmentDTO.score(),
                 LocalDateTime.now(),
-                true
+                assessmentDTO.completed()
         );
         assessment.setUser(user);
         assessment.setProgrammingLanguage(language);
 
-        initializeUserProgress(user, language, score);
+        initializeUserProgress(user, language, assessmentDTO.score());
 
         return initialAssessmentRepository.save(assessment);
     }
