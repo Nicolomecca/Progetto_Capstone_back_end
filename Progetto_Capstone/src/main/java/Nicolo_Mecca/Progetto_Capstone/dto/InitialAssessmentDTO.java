@@ -5,11 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.UUID;
-
 public record InitialAssessmentDTO(
-        @NotNull(message = "User ID is required")
-        UUID userId,
 
         @NotNull(message = "Programming language name is required")
         @NotBlank(message = "Programming language name cannot be blank")

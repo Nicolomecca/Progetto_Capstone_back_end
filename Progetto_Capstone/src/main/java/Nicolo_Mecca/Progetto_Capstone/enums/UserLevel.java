@@ -3,7 +3,7 @@ package Nicolo_Mecca.Progetto_Capstone.enums;
 
 public enum UserLevel {
     BEGINNER("Bronze", 0),
-    INTERMEDIATE("Silver", 100),
+    INTERMEDIATE("Silver", 70),
     ADVANCED("Gold", 200);
 
     private final String badge;

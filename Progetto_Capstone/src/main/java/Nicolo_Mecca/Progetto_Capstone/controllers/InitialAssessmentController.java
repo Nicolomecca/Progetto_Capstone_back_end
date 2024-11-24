@@ -31,6 +31,13 @@ public class InitialAssessmentController {
         return initialAssessmentService.getInitialAssessment(languageName);
     }
 
+    @GetMapping("/user/completed")
+    @PreAuthorize("hasAuthority('USER')")
+    public Map<String, Boolean> checkUserAssessmentCompletion(@AuthenticationPrincipal User user) {
+        boolean completed = initialAssessmentService.hasUserCompletedAnyAssessment(user);
+        return Map.of("completed", completed);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('USER')")

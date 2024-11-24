@@ -141,4 +141,9 @@ public class InitialAssessmentService {
 
         return initialAssessmentRepository.findByUserAndProgrammingLanguage(user, language);
     }
+
+    public boolean hasUserCompletedAnyAssessment(User user) {
+        Optional<InitialAssessment> assessments = initialAssessmentRepository.findByUser(user);
+        return assessments.stream().anyMatch(InitialAssessment::getCompleted);
+    }
 }
