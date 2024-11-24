@@ -90,10 +90,11 @@ public class InizializeDbRunner implements CommandLineRunner {
                     String name = lang.get("name").asText();
                     String category = lang.get("category").asText();
                     String icon = lang.get("icon").asText();
+                    String theory = lang.get("theory").toString();
                     if (!name.isEmpty() && !category.isEmpty()) {
-                        ProgrammingLanguage language = new ProgrammingLanguage(name, category, icon);
+                        ProgrammingLanguage language = new ProgrammingLanguage(name, category, icon, theory);
                         ProgrammingLanguage savedLanguage = languageService.saveLanguage(language);
-                        System.out.println("Added programming language: " + savedLanguage.getName());
+                        System.out.println("Added programming language with theory: " + savedLanguage.getName());
                     } else {
                         System.out.println("Skipped language due to empty name or category: " + lang.toString());
                     }
@@ -102,5 +103,6 @@ public class InizializeDbRunner implements CommandLineRunner {
                 }
             });
         }
+        System.out.println("All programming languages populated successfully.");
     }
 }
