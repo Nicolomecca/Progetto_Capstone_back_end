@@ -11,6 +11,7 @@ import Nicolo_Mecca.Progetto_Capstone.exceptions.NotFoundException;
 import Nicolo_Mecca.Progetto_Capstone.repository.ProgrammingLanguageRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserLanguageProgressRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserQuizResultRepository;
+import Nicolo_Mecca.Progetto_Capstone.repository.UserRepository;
 import kong.unirest.core.HttpResponse;
 import kong.unirest.core.JsonNode;
 import kong.unirest.core.Unirest;
@@ -35,6 +36,8 @@ public class QuizService {
 
     @Autowired
     private ProgrammingLanguageRepository programmingLanguageRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Value("${quiz.api.key}")
     private String apiKey;
@@ -62,8 +65,17 @@ public class QuizService {
         result.setUser(user);
         result.setProgrammingLanguage(language);
 
-        updateUserProgress(user, language, quizResult.score());
+        // Aggiorna il progresso dell'utente
+        UserLanguageProgress updatedProgress = updateUserProgress(user, language, quizResult.score());
 
+        // Aggiorna il punteggio totale dell'utente
+        int newTotalScore = user.getTotalScore() + quizResult.score();
+        user.setTotalScore(newTotalScore);
+
+        // Salva l'utente aggiornato
+        userRepository.save(user);
+
+        // Salva il risultato del quiz
         UserQuizResult savedResult = quizResultRepository.save(result);
 
         return new QuizResponseDTO(
@@ -73,7 +85,7 @@ public class QuizService {
                 savedResult.getScore(),
                 savedResult.getCompletionDate(),
                 savedResult.getCompleted(),
-                UserLevel.fromScore(savedResult.getScore()),
+                updatedProgress.getSkillLevel(),
                 language.getName(),
                 savedResult.getDifficulty()
         );
@@ -131,20 +143,17 @@ public class QuizService {
                 .orElseThrow(() -> new NotFoundException("Programming language not found: " + languageName));
     }
 
-    private void updateUserProgress(User user, ProgrammingLanguage language, Integer newScore) {
+    private UserLanguageProgress updateUserProgress(User user, ProgrammingLanguage language, Integer newScore) {
         UserLanguageProgress progress = progressRepository
                 .findByUserAndProgrammingLanguage(user, language)
                 .orElseThrow(() -> new NotFoundException("User progress not found"));
 
-        // Aggiorna il punteggio corrente
         int updatedScore = progress.getCurrentScore() + newScore;
         progress.setCurrentScore(updatedScore);
 
-        // Calcola e aggiorna il livello dell'utente in base al nuovo punteggio
         UserLevel newLevel = UserLevel.fromScore(updatedScore);
         progress.setSkillLevel(newLevel);
 
-        // Salva le modifiche nel repository
-        progressRepository.save(progress);
+        return progressRepository.save(progress);
     }
 }
