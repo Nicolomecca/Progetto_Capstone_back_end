@@ -4,7 +4,7 @@
       "name": "Next.js",
       "category": "Backend",
       "description": "Linguaggio versatile e potente, ideale per data science e sviluppo web",
-      "icon": "https://www.flaticon.com/free-icon/python_919852?term=python&page=1&position=1&origin=tag&related_id=919852\n",
+      "icon": "https://img.icons8.com/?size=100&id=AU6Wc7r56Fxz&format=png&color=000000",
       "theory": [
         {
           "section": "Fondamenti",
@@ -36,7 +36,7 @@
       "name": "React",
       "category": "Frontend",
       "description": "Libreria JavaScript per costruire interfacce utente moderne e reattive",
-      "icon": "https://cdn-icons-png.flaticon.com/512/5968/5968350.png",
+      "icon": "https://img.icons8.com/?size=100&id=t4YbEbA834uH&format=png&color=000000 ",
       "theory": [
         {
           "section": "Concetti Base",
@@ -62,7 +62,7 @@
       "name": "PostgreSQL",
       "category": "Database",
       "description": "Sistema di gestione database relazionale open source avanzato",
-      "icon": "https://www.flaticon.com/free-icon/postgre_5968342",
+      "icon": "https://img.icons8.com/?size=100&id=LwQEs9KnDgIo&format=png&color=000000",
       "theory": [
         {
           "section": "SQL Base",

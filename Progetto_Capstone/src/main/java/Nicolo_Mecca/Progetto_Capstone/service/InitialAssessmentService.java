@@ -74,6 +74,7 @@ public class InitialAssessmentService {
         };
     }
 
+
     public InitialAssessmentResponseDTO saveInitialAssessment(User user, InitialAssessmentDTO assessmentDTO) {
         ProgrammingLanguage language = programmingLanguageRepository.findByName(assessmentDTO.programmingLanguageName())
                 .orElseThrow(() -> new NotFoundException("Programming language not found: " + assessmentDTO.programmingLanguageName()));
@@ -114,26 +115,6 @@ public class InitialAssessmentService {
         );
     }
 
-    private UserLevel calculateSkillLevel(Integer score) {
-        return UserLevel.fromScore(score);
-    }
-
-
-    private void initializeUserProgress(User user, ProgrammingLanguage language, Integer score) {
-        UserLanguageProgress progress = new UserLanguageProgress(
-                calculateInitialLevel(score),
-                score
-        );
-        progress.setUser(user);
-        progress.setProgrammingLanguage(language);
-        progressRepository.save(progress);
-    }
-
-    private UserLevel calculateInitialLevel(Integer score) {
-        if (score < 30) return UserLevel.BEGINNER;
-        if (score < 60) return UserLevel.INTERMEDIATE;
-        return UserLevel.ADVANCED;
-    }
 
     public Optional<InitialAssessment> getUserInitialAssessment(User user, String languageName) {
         ProgrammingLanguage language = programmingLanguageRepository.findByName(languageName)
