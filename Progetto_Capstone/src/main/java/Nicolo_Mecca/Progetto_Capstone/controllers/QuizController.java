@@ -2,7 +2,6 @@ package Nicolo_Mecca.Progetto_Capstone.controllers;
 
 import Nicolo_Mecca.Progetto_Capstone.dto.QuizResponseDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
-import Nicolo_Mecca.Progetto_Capstone.enums.QuizDifficulty;
 import Nicolo_Mecca.Progetto_Capstone.exceptions.BadRequestException;
 import Nicolo_Mecca.Progetto_Capstone.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +26,11 @@ public class QuizController {
     @GetMapping("/questions/{languageName}/{difficulty}")
     @PreAuthorize("hasAuthority('USER')")
     public List<Map<String, Object>> getQuizQuestions(
+            @AuthenticationPrincipal User user,
             @PathVariable String languageName,
             @PathVariable String difficulty) {
-        // Converte il valore della difficoltà in maiuscolo prima di passarlo all'enum
-        QuizDifficulty quizDifficulty;
-        try {
-            quizDifficulty = QuizDifficulty.valueOf(difficulty.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException("Invalid difficulty level: " + difficulty);
-        }
 
-        return quizService.getQuizQuestions(languageName, quizDifficulty);
+        return quizService.getQuizQuestionsForUser(user, languageName, difficulty);
     }
 
     @PostMapping("/result")

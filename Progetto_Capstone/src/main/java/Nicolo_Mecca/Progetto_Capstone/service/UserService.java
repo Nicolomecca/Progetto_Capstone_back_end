@@ -2,9 +2,12 @@ package Nicolo_Mecca.Progetto_Capstone.service;
 
 import Nicolo_Mecca.Progetto_Capstone.dto.UserDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
+import Nicolo_Mecca.Progetto_Capstone.entities.UserLanguageProgress;
+import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserRole;
 import Nicolo_Mecca.Progetto_Capstone.exceptions.BadRequestException;
 import Nicolo_Mecca.Progetto_Capstone.exceptions.NotFoundException;
+import Nicolo_Mecca.Progetto_Capstone.repository.UserLanguageProgressRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +17,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -22,6 +28,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserLanguageProgressRepository progressRepository;
 
     public User findById(UUID userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with id" + userId + "not found"));
@@ -75,6 +83,15 @@ public class UserService {
         return userRepository.findAllByOrderByTotalScoreDesc(
                 PageRequest.of(page, size)
         );
+    }
+
+    public Map<String, UserLevel> getUserLevels(User user) {
+        List<UserLanguageProgress> progressList = progressRepository.findByUser(user);
+        return progressList.stream()
+                .collect(Collectors.toMap(
+                        progress -> progress.getProgrammingLanguage().getName(),
+                        UserLanguageProgress::getSkillLevel
+                ));
     }
 
 

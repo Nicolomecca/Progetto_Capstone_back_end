@@ -42,6 +42,21 @@ public class QuizService {
     @Value("${quiz.api.key}")
     private String apiKey;
 
+
+    public List<Map<String, Object>> getQuizQuestionsForUser(User user, String languageName, String difficulty) {
+        // Convert the difficulty string to QuizDifficulty enum
+        QuizDifficulty quizDifficulty = QuizDifficulty.valueOf(difficulty.toUpperCase());
+
+        // Fetch and return quiz questions based on the provided difficulty
+        return getQuizQuestions(languageName, quizDifficulty);
+    }
+
+    private UserLevel getUserLevelForLanguage(User user, String languageName) {
+        UserLanguageProgress progress = progressRepository.findByUserAndProgrammingLanguage(user, findProgrammingLanguage(languageName))
+                .orElseThrow(() -> new NotFoundException("User progress not found for language: " + languageName));
+        return progress.getSkillLevel();
+    }
+
     @Cacheable("quizQuestions")
     public List<Map<String, Object>> getQuizQuestions(String languageName, QuizDifficulty difficulty) {
         try {
@@ -155,5 +170,19 @@ public class QuizService {
         progress.setSkillLevel(newLevel);
 
         return progressRepository.save(progress);
+    }
+
+    public QuizDifficulty mapUserLevelToQuizDifficulty(UserLevel userLevel) {
+        switch (userLevel) {
+            case BEGINNER:
+                return QuizDifficulty.EASY;
+            case INTERMEDIATE:
+                return QuizDifficulty.MEDIUM;
+            case ADVANCED:
+            case EXPERT:
+                return QuizDifficulty.HARD;
+            default:
+                throw new IllegalArgumentException("Invalid user level");
+        }
     }
 }
