@@ -172,17 +172,5 @@ public class QuizService {
         return progressRepository.save(progress);
     }
 
-    public QuizDifficulty mapUserLevelToQuizDifficulty(UserLevel userLevel) {
-        switch (userLevel) {
-            case BEGINNER:
-                return QuizDifficulty.EASY;
-            case INTERMEDIATE:
-                return QuizDifficulty.MEDIUM;
-            case ADVANCED:
-            case EXPERT:
-                return QuizDifficulty.HARD;
-            default:
-                throw new IllegalArgumentException("Invalid user level");
-        }
-    }
+
 }
