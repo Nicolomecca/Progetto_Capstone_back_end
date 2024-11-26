@@ -25,7 +25,7 @@ public class InitialAssessment {
     private LocalDateTime date;
     private Boolean completed;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 

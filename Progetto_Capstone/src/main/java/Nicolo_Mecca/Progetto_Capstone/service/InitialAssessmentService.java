@@ -123,8 +123,11 @@ public class InitialAssessmentService {
         return initialAssessmentRepository.findByUserAndProgrammingLanguage(user, language);
     }
 
-    public boolean hasUserCompletedAnyAssessment(User user) {
-        Optional<InitialAssessment> assessments = initialAssessmentRepository.findByUser(user);
-        return assessments.stream().anyMatch(InitialAssessment::getCompleted);
+    public boolean hasUserCompletedAssessmentForLanguage(User user, String languageName) {
+        ProgrammingLanguage language = programmingLanguageRepository.findByName(languageName)
+                .orElseThrow(() -> new NotFoundException("Programming language not found: " + languageName));
+
+        Optional<InitialAssessment> assessment = initialAssessmentRepository.findByUserAndProgrammingLanguage(user, language);
+        return assessment.isPresent() && assessment.get().getCompleted();
     }
 }

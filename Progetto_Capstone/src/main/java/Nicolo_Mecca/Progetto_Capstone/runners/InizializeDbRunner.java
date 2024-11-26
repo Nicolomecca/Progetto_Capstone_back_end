@@ -65,8 +65,7 @@
 //                adminSurname,
 //                adminUsername,
 //                adminEmail,
-//                adminPassword,
-//                null
+//                adminPassword
 //        );
 //
 //        User admin = userService.saveAdmin(adminDTO);

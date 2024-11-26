@@ -31,12 +31,15 @@ public class InitialAssessmentController {
         return initialAssessmentService.getInitialAssessment(languageName);
     }
 
-    @GetMapping("/user/completed")
+    @GetMapping("/user/completed/{languageName}")
     @PreAuthorize("hasAuthority('USER')")
-    public Map<String, Boolean> checkUserAssessmentCompletion(@AuthenticationPrincipal User user) {
-        boolean completed = initialAssessmentService.hasUserCompletedAnyAssessment(user);
+    public Map<String, Boolean> checkUserAssessmentCompletion(
+            @AuthenticationPrincipal User user,
+            @PathVariable String languageName) {
+        boolean completed = initialAssessmentService.hasUserCompletedAssessmentForLanguage(user, languageName);
         return Map.of("completed", completed);
     }
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

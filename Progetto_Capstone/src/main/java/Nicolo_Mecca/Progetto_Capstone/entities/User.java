@@ -46,8 +46,8 @@ public class User implements UserDetails {
     private UserRole role;
 
 
-    @OneToOne(mappedBy = "user")
-    private InitialAssessment initialAssessment;
+    @OneToMany(mappedBy = "user")
+    private List<InitialAssessment> initialAssessments;
 
     @OneToMany(mappedBy = "user")
     private List<UserQuizResult> quizResults;
