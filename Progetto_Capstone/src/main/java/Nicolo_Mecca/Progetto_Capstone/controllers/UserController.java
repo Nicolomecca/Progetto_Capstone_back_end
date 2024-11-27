@@ -1,7 +1,9 @@
 package Nicolo_Mecca.Progetto_Capstone.controllers;
 
+import Nicolo_Mecca.Progetto_Capstone.dto.QuizResponseDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
+import Nicolo_Mecca.Progetto_Capstone.service.QuizService;
 import Nicolo_Mecca.Progetto_Capstone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,6 +22,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private QuizService quizService;
 
     @GetMapping("/leaderboard")
     @PreAuthorize("hasAuthority('USER')")
@@ -33,6 +38,12 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER')")
     public Map<String, UserLevel> getUserLevels(@AuthenticationPrincipal User user) {
         return userService.getUserLevels(user);
+    }
+
+    @GetMapping("/quiz-history")
+    @PreAuthorize("hasAuthority('USER')")
+    public Map<String, List<QuizResponseDTO>> getUserQuizHistoryGrouped(@AuthenticationPrincipal User user) {
+        return quizService.getUserQuizHistoryGrouped(user);
     }
 
 }

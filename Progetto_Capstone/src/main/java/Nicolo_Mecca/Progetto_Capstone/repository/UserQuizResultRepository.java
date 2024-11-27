@@ -10,4 +10,7 @@ import java.util.UUID;
 
 public interface UserQuizResultRepository extends JpaRepository<UserQuizResult, UUID> {
     List<UserQuizResult> findByUserAndProgrammingLanguage(User user, ProgrammingLanguage language);
+
+    List<UserQuizResult> findByUser(User user);
+
 }

@@ -1,17 +1,13 @@
 package Nicolo_Mecca.Progetto_Capstone.service;
 
+import Nicolo_Mecca.Progetto_Capstone.dto.QuizQuestionDTO;
+import Nicolo_Mecca.Progetto_Capstone.dto.QuizRequestDTO;
 import Nicolo_Mecca.Progetto_Capstone.dto.QuizResponseDTO;
-import Nicolo_Mecca.Progetto_Capstone.entities.ProgrammingLanguage;
-import Nicolo_Mecca.Progetto_Capstone.entities.User;
-import Nicolo_Mecca.Progetto_Capstone.entities.UserLanguageProgress;
-import Nicolo_Mecca.Progetto_Capstone.entities.UserQuizResult;
+import Nicolo_Mecca.Progetto_Capstone.entities.*;
 import Nicolo_Mecca.Progetto_Capstone.enums.QuizDifficulty;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
 import Nicolo_Mecca.Progetto_Capstone.exceptions.NotFoundException;
-import Nicolo_Mecca.Progetto_Capstone.repository.ProgrammingLanguageRepository;
-import Nicolo_Mecca.Progetto_Capstone.repository.UserLanguageProgressRepository;
-import Nicolo_Mecca.Progetto_Capstone.repository.UserQuizResultRepository;
-import Nicolo_Mecca.Progetto_Capstone.repository.UserRepository;
+import Nicolo_Mecca.Progetto_Capstone.repository.*;
 import kong.unirest.core.HttpResponse;
 import kong.unirest.core.JsonNode;
 import kong.unirest.core.Unirest;
@@ -38,6 +34,8 @@ public class QuizService {
     private ProgrammingLanguageRepository programmingLanguageRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private QuizQuestionRepository quizQuestionRepository;
 
     @Value("${quiz.api.key}")
     private String apiKey;
@@ -68,59 +66,95 @@ public class QuizService {
         }
     }
 
-    public QuizResponseDTO saveQuizResult(User user, QuizResponseDTO quizResult) {
-        ProgrammingLanguage language = findProgrammingLanguage(quizResult.programmingLanguageName());
+
+    public QuizResponseDTO saveQuizResult(User user, QuizRequestDTO quizRequest) {
+        ProgrammingLanguage language = findProgrammingLanguage(quizRequest.languageName());
 
         UserQuizResult result = new UserQuizResult(
-                quizResult.difficulty(),
-                quizResult.score(),
+                quizRequest.difficulty(),
+                quizRequest.score(),
                 LocalDateTime.now(),
                 true
         );
         result.setUser(user);
         result.setProgrammingLanguage(language);
 
+        final UserQuizResult savedResult = quizResultRepository.save(result);
+
+        List<QuizQuestion> questions = quizRequest.questions().stream()
+                .map(q -> {
+                    QuizQuestion question = new QuizQuestion(
+                            q.questionText(),
+                            q.answers(),
+                            q.userAnswer(),
+                            q.correctAnswer()
+                    );
+                    question.setQuizResult(savedResult);
+                    return quizQuestionRepository.save(question);
+                })
+                .collect(Collectors.toList());
+
+        savedResult.setQuestions(questions);
+        UserQuizResult finalResult = quizResultRepository.save(savedResult);
+
         // Aggiorna il progresso dell'utente
-        UserLanguageProgress updatedProgress = updateUserProgress(user, language, quizResult.score());
+        UserLanguageProgress updatedProgress = updateUserProgress(user, language, quizRequest.score());
 
         // Aggiorna il punteggio totale dell'utente
-        int newTotalScore = user.getTotalScore() + quizResult.score();
+        int newTotalScore = user.getTotalScore() + quizRequest.score();
         user.setTotalScore(newTotalScore);
-
-        // Salva l'utente aggiornato
         userRepository.save(user);
 
-        // Salva il risultato del quiz
-        UserQuizResult savedResult = quizResultRepository.save(result);
-
         return new QuizResponseDTO(
-                savedResult.getUserQuizResultId(),
+                finalResult.getUserQuizResultId(),
                 user.getUserId(),
                 user.getUsername(),
-                savedResult.getScore(),
-                savedResult.getCompletionDate(),
-                savedResult.getCompleted(),
+                finalResult.getScore(),
+                finalResult.getCompletionDate(),
+                finalResult.getCompleted(),
                 updatedProgress.getSkillLevel(),
                 language.getName(),
-                savedResult.getDifficulty()
+                finalResult.getDifficulty(),
+                questions.stream()
+                        .map(q -> new QuizQuestionDTO(
+                                q.getQuestionText(),
+                                q.getAnswers(),
+                                q.getUserAnswer(),
+                                q.getCorrectAnswer()
+                        ))
+                        .collect(Collectors.toList())
         );
     }
 
-    public List<QuizResponseDTO> getUserQuizHistory(User user, String languageName) {
-        ProgrammingLanguage language = findProgrammingLanguage(languageName);
-        List<UserQuizResult> quizResults = quizResultRepository.findByUserAndProgrammingLanguage(user, language);
+    public Map<String, List<QuizResponseDTO>> getUserQuizHistoryGrouped(User user) {
+        List<UserQuizResult> quizResults = quizResultRepository.findByUser(user);
 
-        return quizResults.stream().map(result -> new QuizResponseDTO(
-                result.getUserQuizResultId(),
-                user.getUserId(),
-                user.getUsername(),
-                result.getScore(),
-                result.getCompletionDate(),
-                result.getCompleted(),
-                UserLevel.fromScore(result.getScore()),
-                language.getName(),
-                result.getDifficulty()
-        )).collect(Collectors.toList());
+        return quizResults.stream()
+                .collect(Collectors.groupingBy(
+                        result -> result.getProgrammingLanguage().getName(),
+                        Collectors.mapping(
+                                result -> new QuizResponseDTO(
+                                        result.getUserQuizResultId(),
+                                        user.getUserId(),
+                                        user.getUsername(),
+                                        result.getScore(),
+                                        result.getCompletionDate(),
+                                        result.getCompleted(),
+                                        UserLevel.fromScore(result.getScore()),
+                                        result.getProgrammingLanguage().getName(),
+                                        result.getDifficulty(),
+                                        result.getQuestions().stream()
+                                                .map(q -> new QuizQuestionDTO(
+                                                        q.getQuestionText(),
+                                                        q.getAnswers(),
+                                                        q.getUserAnswer(),
+                                                        q.getCorrectAnswer()
+                                                ))
+                                                .collect(Collectors.toList())
+                                ),
+                                Collectors.toList()
+                        )
+                ));
     }
 
     private String mapLanguageToCategory(String languageName) {

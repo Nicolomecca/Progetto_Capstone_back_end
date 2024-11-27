@@ -4,6 +4,7 @@ import Nicolo_Mecca.Progetto_Capstone.enums.QuizDifficulty;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public record QuizResponseDTO(
@@ -15,6 +16,7 @@ public record QuizResponseDTO(
         Boolean completed,
         UserLevel skillLevel,
         String programmingLanguageName,
-        QuizDifficulty difficulty
+        QuizDifficulty difficulty,
+        List<QuizQuestionDTO> questionText
 ) {
 }

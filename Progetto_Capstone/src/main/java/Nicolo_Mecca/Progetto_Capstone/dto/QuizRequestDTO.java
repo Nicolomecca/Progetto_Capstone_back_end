@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 public record QuizRequestDTO(
 
         @NotNull(message = "Programming language name is required")
@@ -17,6 +19,7 @@ public record QuizRequestDTO(
         @NotNull(message = "Score is required")
         @Min(value = 0, message = "Score cannot be negative")
         @Max(value = 100, message = "Score cannot be more than 100")
-        Integer score
+        Integer score,
+        List<QuizQuestionDTO> questions
 ) {
 }

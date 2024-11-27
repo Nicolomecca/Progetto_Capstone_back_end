@@ -1,5 +1,6 @@
 package Nicolo_Mecca.Progetto_Capstone.controllers;
 
+import Nicolo_Mecca.Progetto_Capstone.dto.QuizRequestDTO;
 import Nicolo_Mecca.Progetto_Capstone.dto.QuizResponseDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
 import Nicolo_Mecca.Progetto_Capstone.exceptions.BadRequestException;
@@ -38,7 +39,7 @@ public class QuizController {
     @PreAuthorize("hasAuthority('USER')")
     public QuizResponseDTO saveQuizResult(
             @AuthenticationPrincipal User user,
-            @RequestBody @Validated QuizResponseDTO quizResult,
+            @RequestBody @Validated QuizRequestDTO quizRequest,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -48,15 +49,15 @@ public class QuizController {
             throw new BadRequestException(message);
         }
 
-        return quizService.saveQuizResult(user, quizResult);
+        return quizService.saveQuizResult(user, quizRequest);
     }
 
-    @GetMapping("/history/{languageName}")
-    @PreAuthorize("hasAuthority('USER')")
-    public List<QuizResponseDTO> getUserQuizHistory(
-            @AuthenticationPrincipal User user,
-            @PathVariable String languageName) {
-
-        return quizService.getUserQuizHistory(user, languageName);
-    }
+//    @GetMapping("/history/{languageName}")
+//    @PreAuthorize("hasAuthority('USER')")
+//    public List<QuizResponseDTO> getUserQuizHistory(
+//            @AuthenticationPrincipal User user,
+//            @PathVariable String languageName) {
+//
+//        return quizService.getUserQuizHistory(user, languageName);
+//    }
 }
