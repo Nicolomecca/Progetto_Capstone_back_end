@@ -12,6 +12,8 @@ import Nicolo_Mecca.Progetto_Capstone.exceptions.NotFoundException;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserLanguageProgressRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserQuizResultRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserRepository;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +40,9 @@ public class UserService {
     private UserLanguageProgressRepository progressRepository;
     @Autowired
     private UserQuizResultRepository userQuizResultRepository;
+
+    @Autowired
+    private Cloudinary cloudinaryUploader;
 
 
     public User findById(UUID userId) {
@@ -116,5 +123,20 @@ public class UserService {
                 ))
                 .sorted(Comparator.comparingInt(UserRankDTO::totalScore).reversed())
                 .collect(Collectors.toList());
+    }
+
+    public String uploadImageProfile(MultipartFile file, User user) {
+        try {
+            String url = (String) cloudinaryUploader.uploader()
+                    .upload(file.getBytes(), ObjectUtils.emptyMap())
+                    .get("url");
+
+            user.setProfileImage(url);
+            userRepository.save(user);
+
+            return url;
+        } catch (IOException e) {
+            throw new BadRequestException("Errore durante l'upload dell'immagine!");
+        }
     }
 }
