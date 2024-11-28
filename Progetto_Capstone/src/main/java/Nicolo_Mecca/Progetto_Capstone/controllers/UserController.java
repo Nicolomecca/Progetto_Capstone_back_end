@@ -1,6 +1,7 @@
 package Nicolo_Mecca.Progetto_Capstone.controllers;
 
 import Nicolo_Mecca.Progetto_Capstone.dto.QuizResponseDTO;
+import Nicolo_Mecca.Progetto_Capstone.dto.UserRankDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
 import Nicolo_Mecca.Progetto_Capstone.service.QuizService;
@@ -9,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -44,6 +42,15 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER')")
     public Map<String, List<QuizResponseDTO>> getUserQuizHistoryGrouped(@AuthenticationPrincipal User user) {
         return quizService.getUserQuizHistoryGrouped(user);
+    }
+
+    @GetMapping("/ranking/{languageName}")
+    @PreAuthorize("hasAuthority('USER')")
+    public List<UserRankDTO> getUserRankingByLanguage(
+            @AuthenticationPrincipal User user,
+            @PathVariable String languageName
+    ) {
+        return userService.getUserRankingByLanguage(languageName);
     }
 
 }

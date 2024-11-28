@@ -13,4 +13,6 @@ public interface UserQuizResultRepository extends JpaRepository<UserQuizResult, 
 
     List<UserQuizResult> findByUser(User user);
 
+    List<UserQuizResult> findByProgrammingLanguageNameAndCompletedTrueOrderByScoreDesc(String languageName);
+
 }

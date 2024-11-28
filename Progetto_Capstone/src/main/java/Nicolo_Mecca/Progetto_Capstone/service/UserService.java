@@ -1,13 +1,16 @@
 package Nicolo_Mecca.Progetto_Capstone.service;
 
 import Nicolo_Mecca.Progetto_Capstone.dto.UserDTO;
+import Nicolo_Mecca.Progetto_Capstone.dto.UserRankDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
 import Nicolo_Mecca.Progetto_Capstone.entities.UserLanguageProgress;
+import Nicolo_Mecca.Progetto_Capstone.entities.UserQuizResult;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserRole;
 import Nicolo_Mecca.Progetto_Capstone.exceptions.BadRequestException;
 import Nicolo_Mecca.Progetto_Capstone.exceptions.NotFoundException;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserLanguageProgressRepository;
+import Nicolo_Mecca.Progetto_Capstone.repository.UserQuizResultRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -30,6 +34,9 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserLanguageProgressRepository progressRepository;
+    @Autowired
+    private UserQuizResultRepository userQuizResultRepository;
+
 
     public User findById(UUID userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with id" + userId + "not found"));
@@ -93,5 +100,21 @@ public class UserService {
         return userRepository.save(admin);
     }
 
-
+    public List<UserRankDTO> getUserRankingByLanguage(String languageName) {
+        return userQuizResultRepository
+                .findByProgrammingLanguageNameAndCompletedTrueOrderByScoreDesc(languageName)
+                .stream()
+                .collect(Collectors.groupingBy(
+                        result -> result.getUser().getUsername(),
+                        Collectors.summingInt(UserQuizResult::getScore)
+                ))
+                .entrySet().stream()
+                .map(entry -> new UserRankDTO(
+                        entry.getKey(),
+                        entry.getValue(),
+                        UserLevel.fromScore(entry.getValue()).toString()
+                ))
+                .sorted(Comparator.comparingInt(UserRankDTO::totalScore).reversed())
+                .collect(Collectors.toList());
+    }
 }
