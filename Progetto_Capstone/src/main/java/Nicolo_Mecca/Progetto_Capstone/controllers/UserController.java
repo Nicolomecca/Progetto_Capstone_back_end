@@ -1,6 +1,7 @@
 package Nicolo_Mecca.Progetto_Capstone.controllers;
 
 import Nicolo_Mecca.Progetto_Capstone.dto.QuizResponseDTO;
+import Nicolo_Mecca.Progetto_Capstone.dto.UserProfileDTO;
 import Nicolo_Mecca.Progetto_Capstone.dto.UserRankDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
 import Nicolo_Mecca.Progetto_Capstone.enums.UserLevel;
@@ -60,6 +61,11 @@ public class UserController {
             @RequestParam("picture") MultipartFile file,
             @AuthenticationPrincipal User user) {
         return userService.uploadImageProfile(file, user);
+    }
+
+    @GetMapping("/profile")
+    public UserProfileDTO getCurrentUserProfile(@AuthenticationPrincipal User user) {
+        return userService.getUserProfile(user);
     }
 
 }

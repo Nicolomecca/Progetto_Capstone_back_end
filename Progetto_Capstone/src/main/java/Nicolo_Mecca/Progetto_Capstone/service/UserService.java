@@ -1,6 +1,7 @@
 package Nicolo_Mecca.Progetto_Capstone.service;
 
 import Nicolo_Mecca.Progetto_Capstone.dto.UserDTO;
+import Nicolo_Mecca.Progetto_Capstone.dto.UserProfileDTO;
 import Nicolo_Mecca.Progetto_Capstone.dto.UserRankDTO;
 import Nicolo_Mecca.Progetto_Capstone.entities.User;
 import Nicolo_Mecca.Progetto_Capstone.entities.UserLanguageProgress;
@@ -138,5 +139,24 @@ public class UserService {
         } catch (IOException e) {
             throw new BadRequestException("Errore durante l'upload dell'immagine!");
         }
+    }
+
+    public UserProfileDTO getUserProfile(User user) {
+        List<UserLanguageProgress> progressList = progressRepository.findByUser(user);
+
+        return new UserProfileDTO(
+                user.getUserId(),
+                user.getName(),
+                user.getSurname(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getProfileImage(),
+                user.getTotalScore(),
+                progressList.stream()
+                        .collect(Collectors.toMap(
+                                progress -> progress.getProgrammingLanguage().getName(),
+                                UserLanguageProgress::getSkillLevel
+                        ))
+        );
     }
 }
