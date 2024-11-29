@@ -3,30 +3,131 @@
     {
       "name": "Next.js",
       "category": "Backend",
-      "description": "Linguaggio versatile e potente, ideale per data science e sviluppo web",
+      "description": "React framework for server-side rendering and static web applications",
       "icon": "https://img.icons8.com/?size=100&id=AU6Wc7r56Fxz&format=png&color=000000",
       "theory": [
         {
-          "section": "Fondamenti",
+          "section": "Fundamentals",
           "topics": [
             {
-              "title": "Introduzione a Python",
-              "content": "Python è un linguaggio di programmazione ad alto livello...",
+              "title": "Introduction to Next.js",
+              "content": "Next.js is a React framework that offers server-side rendering, static site generation, and more to optimize web applications. Developed by Vercel, Next.js simplifies the creation of complex React applications by providing a predefined structure, built-in performance optimizations, and an improved development experience. It supports both server-side rendering (SSR) and static site generation (SSG), allowing developers to choose the most suitable method for each page of the application. Next.js automatically handles code splitting, asset loading, and image optimization, significantly improving application performance.",
               "examples": [
                 {
-                  "code": "print('Hello, World!')",
-                  "explanation": "Il classico esempio di stampa in Python"
+                  "code": "import Head from 'next/head'\n\nexport default function Home() {\n return (\n <div>\n <Head>\n <title>My Next.js App</title>\n </Head>\n <h1>Welcome to Next.js!</h1>\n </div>\n )\n}",
+                  "explanation": "Example of a basic page in Next.js"
+                }
+              ]
+            },
+            {
+              "title": "Project Structure",
+              "content": "The structure of a Next.js project is organized intuitively to facilitate development and maintenance. The 'pages' directory is the heart of the application, where each JavaScript or TypeScript file represents a route. The 'public' folder contains static assets such as images and fonts. The 'next.config.js' file allows for custom framework configuration. The 'components' directory is commonly used for reusable React components. 'styles' contains CSS or SCSS files for application styling. The 'lib' or 'utils' folder is often used for utility functions and shared logic.",
+              "examples": [
+                {
+                  "code": "my-nextjs-app/\n ├── pages/\n ├── public/\n ├── components/\n ├── styles/\n ├── lib/\n ├── next.config.js\n └── package.json",
+                  "explanation": "Typical structure of a Next.js project"
                 }
               ]
             }
           ]
         },
         {
-          "section": "Strutture Dati",
+          "section": "Routing",
           "topics": [
             {
-              "title": "Liste e Tuple",
-              "content": "Le strutture dati fondamentali in Python..."
+              "title": "File-system Based Routing",
+              "content": "Next.js uses a file system-based routing system, where each file in the 'pages' folder automatically becomes a route. This approach greatly simplifies the management of application routes. Files can be nested in subfolders to create more complex paths. Next.js also supports dynamic routes using square brackets in file names. File system-based routing eliminates the need for complex routing configurations and makes the application structure more intuitive and easy to navigate.",
+              "examples": [
+                {
+                  "code": "// pages/about.js\nexport default function About() {\n return <h1>About Us</h1>\n}",
+                  "explanation": "This file automatically creates the '/about' route"
+                }
+              ]
+            },
+            {
+              "title": "Dynamic Routing",
+              "content": "Next.js offers a powerful dynamic routing system that allows creating pages with variable parameters. Using square brackets in the file name, it's possible to define dynamic routes that capture values from the URL. These values can be accessed through the 'query' object in the page props. Dynamic routing is particularly useful for creating detail pages, such as user profiles or blog posts, where the content changes based on the ID or slug in the URL.",
+              "examples": [
+                {
+                  "code": "// pages/posts/[id].js\nimport { useRouter } from 'next/router'\n\nexport default function Post() {\n const router = useRouter()\n const { id } = router.query\n\n return <p>Post: {id}</p>\n}",
+                  "explanation": "Example of dynamic routing for post pages"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "API Routes",
+          "topics": [
+            {
+              "title": "Creating API Routes",
+              "content": "Next.js allows easy creation of API routes, ideal for building RESTful APIs. API routes are serverless functions that can handle HTTP requests and provide responses. These routes are defined in the 'pages/api' folder and can be used for various purposes, such as database interaction, authentication, or as a proxy for external APIs. API routes support all standard HTTP methods and can be customized to handle different types of requests and responses. This approach allows creating a complete backend API within the same Next.js project, simplifying full-stack development.",
+              "examples": [
+                {
+                  "code": "// pages/api/hello.js\nexport default function handler(req, res) {\n res.status(200).json({ name: 'John Doe' })\n}",
+                  "explanation": "This creates an API endpoint at '/api/hello'"
+                }
+              ]
+            },
+            {
+              "title": "Handling API Requests",
+              "content": "API routes in Next.js offer granular control over handling HTTP requests. It's possible to access request details, such as query parameters, request body, and headers, through the 'req' object. The response can be customized using the 'res' object, allowing setting the status code, headers, and response body. API routes also support asynchronous processing, enabling operations such as database interaction or calls to external services. It's possible to implement middleware to handle aspects like authentication or data validation before processing the main request.",
+              "examples": [
+                {
+                  "code": "// pages/api/user/[id].js\nexport default async function handler(req, res) {\n const { id } = req.query\n const { method } = req\n\n switch (method) {\n case 'GET':\n // Retrieve user from database\n res.status(200).json({ id, name: 'John Doe' })\n break\n case 'POST':\n // Update user in database\n res.status(200).json({ message: 'User updated' })\n break\n default:\n res.setHeader('Allow', ['GET', 'POST'])\n res.status(405).end(Method ${method} Not Allowed)\n }\n}",
+                  "explanation": "API route that handles GET and POST requests for a specific user"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "Rendering and Performance",
+          "topics": [
+            {
+              "title": "Server-Side Rendering (SSR)",
+              "content": "Next.js offers Server-Side Rendering (SSR) as one of its main features. SSR allows generating the HTML content of the page on the server for each request, significantly improving initial loading times and search engine optimization (SEO). With SSR, the server sends fully rendered HTML to the browser, allowing users to see the content more quickly. This is particularly useful for pages with dynamic content that changes frequently or requires up-to-date data on each load. Next.js automatically handles the hydration process, which attaches event listeners and restores the React application state on the client side after the initial load.",
+              "examples": [
+                {
+                  "code": "// pages/ssr-page.js\nexport async function getServerSideProps(context) {\n const res = await fetch('https://api.example.com/data')\n const data = await res.json()\n\n return {\n props: { data }, // will be passed to the page component as props\n }\n}\n\nexport default function Page({ data }) {\n return <div>Data from server: {JSON.stringify(data)}</div>\n}",
+                  "explanation": "Example of a page with Server-Side Rendering in Next.js"
+                }
+              ]
+            },
+            {
+              "title": "Static Site Generation (SSG)",
+              "content": "Static Site Generation (SSG) is another powerful feature of Next.js that allows generating static HTML pages at build time. This approach is ideal for pages with content that doesn't change frequently, such as landing pages, blog articles, or documentation pages. SSG offers exceptional performance as pages are pre-rendered and can be served directly from a CDN. Next.js supports both SSG with static data and SSG with dynamic data through the getStaticProps function. For content that requires more frequent updates, Next.js also offers Incremental Static Regeneration (ISR), which allows regenerating individual static pages at specific intervals without having to rebuild the entire site.",
+              "examples": [
+                {
+                  "code": "// pages/ssg-page.js\nexport async function getStaticProps() {\n const res = await fetch('https://api.example.com/static-data')\n const data = await res.json()\n\n return {\n props: { data },\n revalidate: 60, // regenerate the page every 60 seconds\n }\n}\n\nexport default function Page({ data }) {\n return <div>Static data: {JSON.stringify(data)}</div>\n}",
+                  "explanation": "Example of a page with Static Site Generation and Incremental Static Regeneration"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "Styling and CSS",
+          "topics": [
+            {
+              "title": "CSS Modules",
+              "content": "Next.js natively supports CSS Modules, which allow writing CSS with local scope for components. CSS Modules generate unique class names, avoiding style conflicts and improving code modularity. This approach facilitates style maintenance, especially in large projects. Next.js automatically compiles CSS Modules, optimizing performance. It's possible to use advanced CSS features like nesting and variables, depending on the project configuration. CSS Modules integrate seamlessly with Next.js's build system, ensuring that only the necessary styles are loaded for each page.",
+              "examples": [
+                {
+                  "code": "// styles/Button.module.css\n.button {\n background: blue;\n color: white;\n padding: 10px 20px;\n}\n\n// components/Button.js\nimport styles from '../styles/Button.module.css'\n\nexport default function Button() {\n return <button className={styles.button}>Click me</button>\n}",
+                  "explanation": "Example of using CSS Modules in Next.js"
+                }
+              ]
+            },
+            {
+              "title": "Styled JSX",
+              "content": "Styled JSX is a CSS-in-JS solution integrated into Next.js that allows writing CSS directly in React components. This feature offers a component-scoped styling experience without the need for additional configurations. Styled JSX automatically isolates styles, preventing conflicts between different components. It supports dynamic features such as interpolation of JavaScript values in styles. Styled JSX is particularly useful for components with complex style logic or for rapid prototyping. Next.js automatically optimizes Styled JSX styles for performance, extracting critical CSS and loading styles efficiently.",
+              "examples": [
+                {
+                  "code": "export default function Button() {\n return (\n <>\n <button>Click me</button>\n <style jsx>{\n button {\n background: blue;\n color: white;\n padding: 10px 20px;\n }\n }</style>\n </>\n )\n}",
+                  "explanation": "Example of using Styled JSX in a Next.js component"
+                }
+              ]
             }
           ]
         }
@@ -35,24 +136,71 @@
     {
       "name": "React",
       "category": "Frontend",
-      "description": "Libreria JavaScript per costruire interfacce utente moderne e reattive",
-      "icon": "https://img.icons8.com/?size=100&id=t4YbEbA834uH&format=png&color=000000 ",
+      "description": "JavaScript library for building modern and reactive user interfaces",
+      "icon": "https://img.icons8.com/?size=100&id=t4YbEbA834uH&format=png&color=000000",
       "theory": [
         {
-          "section": "Concetti Base",
+          "section": "Fundamentals",
           "topics": [
             {
-              "title": "Componenti React",
-              "content": "I componenti sono i blocchi fondamentali di React..."
+              "title": "Introduction to React",
+              "content": "React is a JavaScript library for building user interfaces, developed and maintained by Facebook. It allows developers to create reusable UI components and efficiently manage the state of complex applications. React uses a virtual DOM for optimal rendering performance and supports a unidirectional data flow, making it easier to understand and debug large applications."
+            },
+            {
+              "title": "JSX",
+              "content": "JSX is a syntax extension for JavaScript, recommended for use with React. It allows you to write HTML-like code in your JavaScript files, making it easier to describe what the UI should look like. JSX is not required for using React, but it makes the code more readable and writing it more efficient."
             }
           ]
         },
         {
-          "section": "Hooks",
+          "section": "Components",
           "topics": [
             {
-              "title": "useState e useEffect",
-              "content": "Gli hooks permettono di gestire lo stato..."
+              "title": "Functional Components",
+              "content": "Functional components are the modern way of writing React components. They are JavaScript functions that accept props as an argument and return React elements. With the introduction of Hooks, functional components can now manage state and side effects, making class components largely unnecessary."
+            },
+            {
+              "title": "Class Components",
+              "content": "Class components are an older way of creating React components. They are ES6 classes that extend React.Component. While still supported, they are less commonly used in modern React development due to the introduction of Hooks."
+            }
+          ]
+        },
+        {
+          "section": "State and Props",
+          "topics": [
+            {
+              "title": "Managing State with Hooks",
+              "content": "The useState hook allows functional components to manage local state. It provides a way to declare state variables in functional components, eliminating the need for class components in many cases."
+            },
+            {
+              "title": "Props",
+              "content": "Props (short for properties) are a way of passing data from parent to child components. They are read-only and help make your components reusable."
+            }
+          ]
+        },
+        {
+          "section": "Lifecycle and Effects",
+          "topics": [
+            {
+              "title": "useEffect Hook",
+              "content": "The useEffect hook lets you perform side effects in functional components. It serves the same purpose as componentDidMount, componentDidUpdate, and componentWillUnmount in React class components, but unified into a single API."
+            },
+            {
+              "title": "Custom Hooks",
+              "content": "Custom Hooks are a mechanism to reuse stateful logic between components. They allow you to extract component logic into reusable functions, promoting code reuse and cleaner component structure."
+            }
+          ]
+        },
+        {
+          "section": "Advanced Concepts",
+          "topics": [
+            {
+              "title": "Context API",
+              "content": "The Context API provides a way to pass data through the component tree without having to pass props down manually at every level. It's designed to share data that can be considered 'global' for a tree of React components."
+            },
+            {
+              "title": "React Router",
+              "content": "React Router is a standard library for routing in React. It enables the navigation among views of various components in a React Application, allows changing the browser URL, and keeps the UI in sync with the URL."
             }
           ]
         }
@@ -61,24 +209,71 @@
     {
       "name": "PostgreSQL",
       "category": "Database",
-      "description": "Sistema di gestione database relazionale open source avanzato",
+      "description": "Advanced open-source relational database management system",
       "icon": "https://img.icons8.com/?size=100&id=LwQEs9KnDgIo&format=png&color=000000",
       "theory": [
         {
-          "section": "SQL Base",
+          "section": "Fundamentals",
           "topics": [
             {
-              "title": "Query fondamentali",
-              "content": "Le query SQL di base in PostgreSQL..."
+              "title": "Introduction to PostgreSQL",
+              "content": "PostgreSQL is a powerful, open-source object-relational database system that uses and extends the SQL language combined with many features that safely store and scale the most complicated data workloads. It has earned a strong reputation for its proven architecture, reliability, data integrity, robust feature set, extensibility, and the dedication of the open source community behind the software to consistently deliver performant and innovative solutions."
+            },
+            {
+              "title": "Database Structure",
+              "content": "PostgreSQL organizes data into databases, which contain schemas, tables, and other objects. Tables are composed of columns (fields) and rows (records). PostgreSQL supports various data types, including numeric, string, date/time, and more complex types like arrays and JSON."
             }
           ]
         },
         {
-          "section": "Gestione Database",
+          "section": "Data Definition",
           "topics": [
             {
-              "title": "Indici e Performance",
-              "content": "Ottimizzazione delle performance in PostgreSQL..."
+              "title": "Creating Tables",
+              "content": "Tables in PostgreSQL are defined using the CREATE TABLE statement. This allows you to specify column names, data types, constraints, and other properties of the table structure."
+            },
+            {
+              "title": "Altering Tables",
+              "content": "The ALTER TABLE command in PostgreSQL allows you to modify existing table structures, such as adding or removing columns, changing data types, or adding constraints."
+            }
+          ]
+        },
+        {
+          "section": "Data Manipulation",
+          "topics": [
+            {
+              "title": "Inserting Data",
+              "content": "Data is inserted into PostgreSQL tables using the INSERT statement. This command allows you to add single or multiple rows of data to a table."
+            },
+            {
+              "title": "Updating and Deleting Data",
+              "content": "The UPDATE statement is used to modify existing data in a table, while the DELETE statement removes rows from a table based on specified conditions."
+            }
+          ]
+        },
+        {
+          "section": "Querying Data",
+          "topics": [
+            {
+              "title": "Basic SELECT Queries",
+              "content": "The SELECT statement is used to retrieve data from one or more tables. It allows for filtering, sorting, and combining data from different sources."
+            },
+            {
+              "title": "Joins",
+              "content": "PostgreSQL supports various types of joins (INNER, LEFT, RIGHT, FULL OUTER) to combine data from multiple tables based on related columns."
+            }
+          ]
+        },
+        {
+          "section": "Advanced Features",
+          "topics": [
+            {
+              "title": "Indexes",
+              "content": "Indexes in PostgreSQL are used to improve query performance by allowing faster data retrieval. PostgreSQL supports various index types, including B-tree, Hash, GiST, and GIN."
+            },
+            {
+              "title": "Transactions",
+              "content": "PostgreSQL provides robust transaction support, ensuring data integrity and consistency. Transactions allow multiple operations to be treated as a single unit of work."
             }
           ]
         }
@@ -86,3 +281,5 @@
     }
   ]
 }
+
+
