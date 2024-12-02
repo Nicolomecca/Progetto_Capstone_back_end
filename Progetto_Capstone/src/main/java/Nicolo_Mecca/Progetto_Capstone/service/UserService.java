@@ -13,6 +13,7 @@ import Nicolo_Mecca.Progetto_Capstone.exceptions.NotFoundException;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserLanguageProgressRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserQuizResultRepository;
 import Nicolo_Mecca.Progetto_Capstone.repository.UserRepository;
+import Nicolo_Mecca.Progetto_Capstone.tools.MailgunSender;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,8 @@ public class UserService {
     private UserLanguageProgressRepository progressRepository;
     @Autowired
     private UserQuizResultRepository userQuizResultRepository;
+    @Autowired
+    private MailgunSender mailgunSender;
 
     @Autowired
     private Cloudinary cloudinaryUploader;
@@ -62,7 +65,9 @@ public class UserService {
                 userDTO.email(),
                 passwordEncoder.encode(userDTO.password())
         );
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        mailgunSender.sendRegistrationEmail(savedUser);
+        return savedUser;
     }
 
 
