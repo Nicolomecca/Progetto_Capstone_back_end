@@ -31,7 +31,7 @@ public class ExplanationController {
             );
             response.put("explanation", explanation);
         } catch (Exception e) {
-            response.put("error", "Errore durante la generazione della spiegazione: " + e.getMessage());
+            response.put("error", "Error generating explanation: " + e.getMessage());
         }
         return response;
     }
