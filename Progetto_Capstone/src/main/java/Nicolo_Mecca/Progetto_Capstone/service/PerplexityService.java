@@ -17,12 +17,11 @@ public class PerplexityService {
     private String apiKey;
 
     public String getExplanation(String question, String userAnswer, String correctAnswer) throws Exception {
-        String prompt = String.format("Question: %s\nUser's answer: %s\nCorrect answer: %s\nExplain why the user's answer is incorrect and provide a detailed explanation of the correct answer.", question, userAnswer, correctAnswer);
-
+        String prompt = String.format("Question: %s\nUser's answer: %s\nCorrect answer: %s\nProvide a concise but comprehensive explanation of why the user's answer is incorrect .", question, userAnswer, correctAnswer);
         String requestBody = objectMapper.writeValueAsString(Map.of(
                 "model", "llama-3.1-sonar-small-128k-online",  // Updated model
                 "messages", List.of(
-                        Map.of("role", "system", "content", "You are a concise educational assistant. Always provide explanations in a maximum of two lines. Be as synthetic as possible, please."),
+                        Map.of("role", "system", "content", "You are a concise educational assistant."),
                         Map.of("role", "user", "content", prompt)
                 )
         ));
