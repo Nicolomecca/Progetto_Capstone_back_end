@@ -162,6 +162,9 @@ public class QuizService {
             case "react" -> "React";
             case "next.js" -> "Next.js";
             case "postgresql" -> "SQL";
+            case "code" -> "Code";
+            case "laravel" -> "Laravel";
+            case "nodejs" -> "Nodejs";
             default -> throw new IllegalArgumentException("Unsupported programming language: " + languageName);
         };
     }

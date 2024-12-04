@@ -278,6 +278,225 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Code",
+      "category": "Code",
+      "description": "Linguaggio di programmazione ad alto livello, interpretato e orientato agli oggetti",
+      "icon": "https://img.icons8.com/?size=100&id=108784&format=png",
+      "theory": [
+        {
+          "section": "Fondamenti",
+          "topics": [
+            {
+              "title": "Introduzione a JavaScript",
+              "content": "JavaScript è un linguaggio di programmazione versatile e ampiamente utilizzato, principalmente noto per la sua capacità di aggiungere interattività alle pagine web. È un linguaggio interpretato, orientato agli oggetti e di alto livello che supporta la programmazione funzionale e basata su eventi."
+            },
+            {
+              "title": "Variabili e Tipi di Dati",
+              "content": "JavaScript utilizza var, let e const per dichiarare variabili. I tipi di dati principali includono Number, String, Boolean, Object, Array, null e undefined. JavaScript è un linguaggio a tipizzazione dinamica, il che significa che le variabili possono contenere diversi tipi di dati in momenti diversi."
+            }
+          ]
+        },
+        {
+          "section": "Strutture di Controllo",
+          "topics": [
+            {
+              "title": "Condizionali",
+              "content": "JavaScript supporta istruzioni condizionali come if, else if, else e switch per il controllo del flusso del programma in base a condizioni specifiche."
+            },
+            {
+              "title": "Cicli",
+              "content": "I cicli in JavaScript includono for, while e do...while per l'esecuzione ripetuta di blocchi di codice. Inoltre, JavaScript offre metodi come forEach, map e filter per iterare sugli array."
+            }
+          ]
+        },
+        {
+          "section": "Funzioni",
+          "topics": [
+            {
+              "title": "Dichiarazione di Funzioni",
+              "content": "Le funzioni in JavaScript possono essere dichiarate usando la parola chiave function o come espressioni di funzione. JavaScript supporta anche le arrow functions, una sintassi più concisa introdotta in ES6."
+            },
+            {
+              "title": "Ambito e Closure",
+              "content": "JavaScript utilizza l'ambito lessicale e supporta le closure, che permettono alle funzioni di accedere a variabili del loro ambito esterno anche dopo che la funzione esterna è terminata."
+            }
+          ]
+        },
+        {
+          "section": "Oggetti e Prototipi",
+          "topics": [
+            {
+              "title": "Creazione di Oggetti",
+              "content": "Gli oggetti in JavaScript possono essere creati usando la notazione letterale, il costruttore Object() o funzioni costruttore personalizzate. JavaScript utilizza un sistema basato sui prototipi per l'ereditarietà."
+            },
+            {
+              "title": "Metodi degli Oggetti",
+              "content": "JavaScript fornisce numerosi metodi integrati per manipolare oggetti, come Object.create(), Object.keys(), e Object.assign(). Le classi ES6 offrono una sintassi più familiare per la creazione di oggetti e l'implementazione dell'ereditarietà."
+            }
+          ]
+        },
+        {
+          "section": "Funzionalità Avanzate",
+          "topics": [
+            {
+              "title": "Programmazione Asincrona",
+              "content": "JavaScript supporta la programmazione asincrona attraverso callback, Promises e async/await, consentendo operazioni non bloccanti e una migliore gestione delle operazioni di I/O."
+            },
+            {
+              "title": "Moduli",
+              "content": "I moduli JavaScript permettono di organizzare il codice in unità separate e riutilizzabili. ES6 ha introdotto una sintassi standardizzata per i moduli con le parole chiave import e export."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Laravel",
+      "category": "Laravel",
+      "description": "Framework PHP open-source per lo sviluppo di applicazioni web basato sul pattern architetturale MVC",
+      "icon": "https://img.icons8.com/?size=100&id=108784&format=png",
+      "theory": [
+        {
+          "section": "Fondamenti",
+          "topics": [
+            {
+              "title": "Introduzione a Laravel",
+              "content": "Laravel è un framework PHP open-source per lo sviluppo di applicazioni web, noto per la sua sintassi elegante e la sua architettura MVC (Model-View-Controller). Offre un approccio semplice e intuitivo per lo sviluppo di applicazioni web robuste e scalabili."
+            },
+            {
+              "title": "Architettura MVC",
+              "content": "Laravel segue il pattern architetturale Model-View-Controller (MVC). Il Model rappresenta la logica dei dati, la View l'interfaccia utente e il Controller funge da intermediario tra Model e View, gestendo le richieste degli utenti."
+            }
+          ]
+        },
+        {
+          "section": "Componenti Principali",
+          "topics": [
+            {
+              "title": "Routing",
+              "content": "Il sistema di routing di Laravel permette di mappare le richieste HTTP a specifiche funzioni o controller. Le rotte possono essere definite nel file routes/web.php per le applicazioni web o routes/api.php per le API."
+            },
+            {
+              "title": "Eloquent ORM",
+              "content": "Eloquent è l'ORM (Object-Relational Mapping) di Laravel che fornisce un'interfaccia semplice per interagire con il database. Permette di definire modelli che rappresentano tabelle del database e offre metodi intuitivi per le operazioni CRUD."
+            }
+          ]
+        },
+        {
+          "section": "Gestione dei Dati",
+          "topics": [
+            {
+              "title": "Migrazioni",
+              "content": "Le migrazioni in Laravel sono un sistema di controllo versione per il database. Permettono di definire e modificare la struttura del database in modo programmatico, facilitando la collaborazione tra sviluppatori."
+            },
+            {
+              "title": "Query Builder",
+              "content": "Laravel offre un potente Query Builder che permette di costruire query SQL in modo fluente e orientato agli oggetti, senza dover scrivere SQL raw."
+            }
+          ]
+        },
+        {
+          "section": "Sicurezza",
+          "topics": [
+            {
+              "title": "Autenticazione e Autorizzazione",
+              "content": "Laravel fornisce un sistema di autenticazione out-of-the-box e strumenti per l'autorizzazione come i middleware e le policy, permettendo di proteggere facilmente le risorse dell'applicazione."
+            },
+            {
+              "title": "Protezione CSRF",
+              "content": "Laravel include protezione contro attacchi Cross-Site Request Forgery (CSRF) generando automaticamente token CSRF per ogni sessione utente attiva."
+            }
+          ]
+        },
+        {
+          "section": "Funzionalità Avanzate",
+          "topics": [
+            {
+              "title": "Blade Template Engine",
+              "content": "Blade è il motore di templating di Laravel che offre una sintassi elegante e potente per la creazione di viste. Permette l'uso di direttive per il controllo del flusso e il riutilizzo del codice."
+            },
+            {
+              "title": "Artisan CLI",
+              "content": "Artisan è l'interfaccia a riga di comando inclusa in Laravel. Fornisce numerosi comandi utili per lo sviluppo, come la generazione di codice, la gestione delle migrazioni e l'esecuzione di task schedulati."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Nodejs",
+      "category": "Nodejs",
+      "description": "Ambiente di esecuzione JavaScript lato server basato sul motore V8 di Chrome",
+      "icon": "https://img.icons8.com/?size=100&id=108784&format=png",
+      "theory": [
+        {
+          "section": "Fondamenti",
+          "topics": [
+            {
+              "title": "Introduzione a Node.js",
+              "content": "Node.js è un runtime JavaScript costruito sul motore V8 di Chrome. Permette di eseguire codice JavaScript lato server, consentendo lo sviluppo di applicazioni web scalabili e ad alte prestazioni. Node.js utilizza un modello di I/O non bloccante e orientato agli eventi."
+            },
+            {
+              "title": "Architettura Event-Driven",
+              "content": "Node.js si basa su un'architettura event-driven e un loop di eventi asincrono. Questo approccio consente di gestire molte connessioni simultanee in modo efficiente, rendendolo ideale per applicazioni in tempo reale e ad alta concorrenza."
+            }
+          ]
+        },
+        {
+          "section": "Componenti Principali",
+          "topics": [
+            {
+              "title": "Moduli",
+              "content": "Node.js utilizza un sistema modulare per organizzare il codice. I moduli possono essere creati, importati ed esportati utilizzando il sistema CommonJS o la più recente sintassi ES6. Il gestore di pacchetti npm facilita l'installazione e la gestione delle dipendenze."
+            },
+            {
+              "title": "Event Emitter",
+              "content": "L'Event Emitter è una classe fondamentale in Node.js che implementa il pattern observer. Permette di creare, emettere e gestire eventi personalizzati, facilitando la comunicazione tra diverse parti dell'applicazione."
+            }
+          ]
+        },
+        {
+          "section": "Gestione dei Dati",
+          "topics": [
+            {
+              "title": "File System",
+              "content": "Node.js offre un modulo fs integrato per interagire con il file system. Fornisce metodi sia sincroni che asincroni per operazioni come lettura, scrittura e manipolazione di file e directory."
+            },
+            {
+              "title": "Streams",
+              "content": "Gli Streams in Node.js sono astrazioni per gestire flussi di dati. Sono particolarmente utili per lavorare con grandi quantità di dati, permettendo di processarli in piccoli chunk invece che caricarli interamente in memoria."
+            }
+          ]
+        },
+        {
+          "section": "Networking",
+          "topics": [
+            {
+              "title": "HTTP/HTTPS",
+              "content": "Node.js include moduli http e https per creare server web e client. Questi moduli permettono di gestire richieste e risposte HTTP, rendendo semplice la creazione di API RESTful e applicazioni web."
+            },
+            {
+              "title": "Socket.IO",
+              "content": "Socket.IO è una libreria popolare per Node.js che facilita la comunicazione in tempo reale bidirezionale tra client e server. È ampiamente utilizzata per sviluppare applicazioni come chat e giochi multiplayer."
+            }
+          ]
+        },
+        {
+          "section": "Funzionalità Avanzate",
+          "topics": [
+            {
+              "title": "Cluster",
+              "content": "Il modulo cluster di Node.js permette di sfruttare i processori multi-core, creando processi figlio che condividono le stesse porte del server. Questo migliora le prestazioni e la scalabilità delle applicazioni Node.js."
+            },
+            {
+              "title": "Debugging",
+              "content": "Node.js offre strumenti integrati per il debugging, incluso un debugger built-in accessibile tramite il flag --inspect. Inoltre, supporta l'integrazione con strumenti di sviluppo come Chrome DevTools per un debugging avanzato."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

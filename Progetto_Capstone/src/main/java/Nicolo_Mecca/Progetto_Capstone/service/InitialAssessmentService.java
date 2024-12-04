@@ -70,6 +70,9 @@ public class InitialAssessmentService {
             case "react" -> "React";
             case "next.js" -> "Next.js";
             case "postgresql" -> "SQL";
+            case "code" -> "Code";
+            case "laravel" -> "Laravel";
+            case "nodejs" -> "Nodejs";
             default -> throw new RuntimeException("Unsupported programming language: " + languageName);
         };
     }
