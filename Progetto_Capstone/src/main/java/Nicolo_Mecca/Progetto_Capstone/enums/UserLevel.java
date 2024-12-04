@@ -5,16 +5,16 @@ import lombok.Getter;
 
 @Getter
 public enum UserLevel {
-    BEGINNER("Bronze", 0),
-    INTERMEDIATE("Silver", 80),
-    ADVANCED("Gold", 500),
-    EXPERT("Platinum", 100000); // Aggiungi un livello EXPERT se necessario
+    BEGINNER(0),
+    INTERMEDIATE(80),
+    ADVANCED(500),
+    EXPERT(100000); // Aggiungi un livello EXPERT se necessario
 
-    private final String badge;
+
     private final int requiredScore;
 
-    UserLevel(String badge, int requiredScore) {
-        this.badge = badge;
+    UserLevel(int requiredScore) {
+
         this.requiredScore = requiredScore;
     }
 
