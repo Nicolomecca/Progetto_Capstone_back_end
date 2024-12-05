@@ -164,4 +164,22 @@ public class UserService {
                         ))
         );
     }
+
+    public User updateUser(UUID userId, UserDTO userDTO) {
+        User user = findById(userId);
+
+        if (!user.getEmail().equals(userDTO.email()) && userRepository.existsByEmail(userDTO.email())) {
+            throw new BadRequestException("Email already in use");
+        }
+        if (!user.getUsername().equals(userDTO.userName()) && userRepository.existsByUserName(userDTO.userName())) {
+            throw new BadRequestException("Username already in use");
+        }
+
+        user.setName(userDTO.name());
+        user.setSurname(userDTO.surname());
+        user.setUserName(userDTO.userName());
+        user.setEmail(userDTO.email());
+
+        return userRepository.save(user);
+    }
 }

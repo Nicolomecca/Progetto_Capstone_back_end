@@ -173,6 +173,7 @@ public class QuizService {
         return Unirest.get("https://quizapi.io/api/v1/questions")
                 .queryString("apiKey", apiKey)
                 .queryString("category", category)
+                
                 .queryString("difficulty", difficulty.toString().toLowerCase())
                 .queryString("limit", "10")
                 .asJson();
