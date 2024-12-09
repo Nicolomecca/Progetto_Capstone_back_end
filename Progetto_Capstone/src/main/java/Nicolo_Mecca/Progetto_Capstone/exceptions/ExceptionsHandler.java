@@ -27,7 +27,7 @@ public class ExceptionsHandler {
     @ExceptionHandler(AuthorizationDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN) // 403
     public ErrorsResponseDTO handleForbidden(AuthorizationDeniedException ex) {
-        return new ErrorsResponseDTO("Non hai i permessi per accedere", LocalDateTime.now());
+        return new ErrorsResponseDTO("You don't have permission to access", LocalDateTime.now());
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -40,6 +40,6 @@ public class ExceptionsHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500
     public ErrorsResponseDTO handleGeneric(Exception ex) {
         ex.printStackTrace();
-        return new ErrorsResponseDTO("Problema lato server! risolveremo presto!", LocalDateTime.now());
+        return new ErrorsResponseDTO("Server-side problem! We'll fix it soon!", LocalDateTime.now());
     }
 }

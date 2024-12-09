@@ -52,12 +52,5 @@ public class QuizController {
         return quizService.saveQuizResult(user, quizRequest);
     }
 
-//    @GetMapping("/history/{languageName}")
-//    @PreAuthorize("hasAuthority('USER')")
-//    public List<QuizResponseDTO> getUserQuizHistory(
-//            @AuthenticationPrincipal User user,
-//            @PathVariable String languageName) {
-//
-//        return quizService.getUserQuizHistory(user, languageName);
-//    }
+
 }

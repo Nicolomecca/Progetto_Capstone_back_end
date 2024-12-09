@@ -98,10 +98,10 @@ public class QuizService {
         savedResult.setQuestions(questions);
         UserQuizResult finalResult = quizResultRepository.save(savedResult);
 
-        // Aggiorna il progresso dell'utente
+        // Aggiorno il progresso dell'utente
         UserLanguageProgress updatedProgress = updateUserProgress(user, language, quizRequest.score());
 
-        // Aggiorna il punteggio totale dell'utente
+        // Aggiorno il punteggio totale dell'utente
         int newTotalScore = user.getTotalScore() + quizRequest.score();
         user.setTotalScore(newTotalScore);
         userRepository.save(user);

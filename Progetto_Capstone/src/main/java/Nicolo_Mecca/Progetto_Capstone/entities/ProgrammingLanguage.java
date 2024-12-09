@@ -15,8 +15,6 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties({"quizResults", "languageProgresses", "initialAssessments"})
-// Relazioni bidirezionali con mappedBy
-
 public class ProgrammingLanguage {
     @Id
     @GeneratedValue
