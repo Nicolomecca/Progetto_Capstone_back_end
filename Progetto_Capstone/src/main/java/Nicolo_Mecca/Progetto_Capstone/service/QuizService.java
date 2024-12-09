@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -173,7 +174,7 @@ public class QuizService {
         return Unirest.get("https://quizapi.io/api/v1/questions")
                 .queryString("apiKey", apiKey)
                 .queryString("category", category)
-                
+
                 .queryString("difficulty", difficulty.toString().toLowerCase())
                 .queryString("limit", "10")
                 .asJson();
@@ -210,5 +211,18 @@ public class QuizService {
         return progressRepository.save(progress);
     }
 
+    public List<Map<String, Object>> getLanguageUsageRanking() {
+        List<Object[]> results = quizResultRepository.countQuizzesByLanguage();
+
+        return results.stream()
+                .map(result -> {
+                    Map<String, Object> languageUsage = new HashMap<>();
+                    languageUsage.put("languageName", ((ProgrammingLanguage) result[0]).getName());
+                    languageUsage.put("quizCount", ((Long) result[1]).intValue());
+                    return languageUsage;
+                })
+                .sorted((a, b) -> ((Integer) b.get("quizCount")).compareTo((Integer) a.get("quizCount")))
+                .collect(Collectors.toList());
+    }
 
 }
