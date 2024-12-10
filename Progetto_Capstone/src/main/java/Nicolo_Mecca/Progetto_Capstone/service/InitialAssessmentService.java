@@ -66,15 +66,22 @@ public class InitialAssessmentService {
     }
 
     private String mapLanguageToCategory(String languageName) {
-        return switch (languageName.toLowerCase()) {
-            case "react" -> "React";
-            case "next.js" -> "Next.js";
-            case "postgresql" -> "SQL";
-            case "code" -> "Code";
-            case "laravel" -> "Laravel";
-            case "nodejs" -> "Nodejs";
-            default -> throw new RuntimeException("Unsupported programming language: " + languageName);
-        };
+        switch (languageName.toLowerCase()) {
+            case "react":
+                return "React";
+            case "next.js":
+                return "Next.js";
+            case "postgresql":
+                return "SQL";
+            case "code":
+                return "Code";
+            case "laravel":
+                return "Laravel";
+            case "nodejs":
+                return "Nodejs";
+            default:
+                throw new IllegalArgumentException("Unsupported programming language: " + languageName);
+        }
     }
 
 
