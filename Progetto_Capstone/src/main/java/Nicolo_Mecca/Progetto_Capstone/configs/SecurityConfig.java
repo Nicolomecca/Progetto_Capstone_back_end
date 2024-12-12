@@ -48,7 +48,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000","https://progetto-capstone-front-end.vercel.app"));
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
         /*configuration.addAllowedOrigin("http://localhost:3000");
